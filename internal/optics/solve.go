@@ -37,7 +37,7 @@ func Solve(s model.Stack, inc model.Incidence, pol model.Polarization) (model.St
 	}
 	scale := 1 / float64(len(parts))
 
-	return model.StackResult{
+	res := model.StackResult{
 		WavelengthNm:     inc.WavelengthNm,
 		AngleDeg:         inc.AngleDeg,
 		Polarization:     pol.String(),
@@ -48,7 +48,8 @@ func Solve(s model.Stack, inc model.Incidence, pol model.Polarization) (model.St
 		BareReflection:   brSum * scale,
 		BareTransmission: btSum * scale,
 		BareAbsorption:   baSum * scale,
-	}, nil
+	}
+	return bindSolveResult(res), nil
 }
 
 // solveOne runs the characteristic-matrix path for one elementary
