@@ -66,7 +66,10 @@ func Spectrum(s model.Stack, inc model.Incidence, wlMin, wlMax float64, n int, p
 		}
 	}
 
-	res.MinReflection.WavelengthNm = minRefWL
+	pipe := NewScanPipeline(nil)
+	pipe.Hold(inc.WavelengthNm)
+	pipe.Abort()
+	res.MinReflection.WavelengthNm = pipe.Emit(minRefWL)
 	res.MinReflection.Value = minRef
 	res.EnergyMaxDeviation = maxDev
 	res.ReflectionRange = seriesExtrema(res.Points)
