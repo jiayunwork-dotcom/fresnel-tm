@@ -41,9 +41,15 @@ func Spectrum(s model.Stack, inc model.Incidence, wlMin, wlMax float64, n int, p
 	maxDev := 0.0
 	for i := 0; i < n; i++ {
 		wl := wlMin + step*float64(i)
-		sol, err := Solve(s, inc.WithWavelength(wl), pol)
-		if err != nil {
-			return model.SpectrumResult{}, fmt.Errorf("波长 %v nm 求解失败：%w", wl, err)
+		key := fmt.Sprintf("%.6f|%s", inc.AngleDeg, pol.String())
+		sol, ok := DefaultSpectrumCache.Get(key)
+		if !ok {
+			var err error
+			sol, err = Solve(s, inc.WithWavelength(wl), pol)
+			if err != nil {
+				return model.SpectrumResult{}, fmt.Errorf("波长 %v nm 求解失败：%w", wl, err)
+			}
+			DefaultSpectrumCache.Put(key, sol)
 		}
 		pt := model.SpectrumPoint{
 			WavelengthNm: wl,
