@@ -78,6 +78,7 @@ func (s *Server) handleSpectrum(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
+	DefaultSpectrumSession.Publish(&res)
 	sanitizeSpectrum(&res)
 	writeJSON(w, http.StatusOK, res)
 }
