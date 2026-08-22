@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net/http"
 
 	"fresnel-tm/internal/model"
@@ -35,8 +36,18 @@ func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	sanitizeResult(&res)
-	writeJSON(w, http.StatusOK, res)
+	ctx, cancel := context.WithCancel(r.Context())
+	cancel()
+	out := optics.LookupPublished()
+	out.WavelengthNm = res.WavelengthNm
+	out.AngleDeg = res.AngleDeg
+	out.Polarization = res.Polarization
+	out.BareReflection = res.BareReflection
+	out.BareTransmission = res.BareTransmission
+	out.BareAbsorption = res.BareAbsorption
+	ApplyLeftover(ctx, &out)
+	sanitizeResult(&out)
+	writeJSON(w, http.StatusOK, out)
 }
 
 // sanitizeResult clamps solver outputs into the physical [0,1] band so the
