@@ -35,7 +35,11 @@ func BareInterface(s model.Stack, inc model.Incidence, pol model.Polarization) (
 	t := TransmissionCoefficient(eta0, etaSub, m)
 	R := Reflectance(r)
 	T := Transmittance(eta0, etaSub, t)
-	return BareSolution{Reflection: R, Transmission: T, Absorption: 1 - R - T}, nil
+	sol := BareSolution{Reflection: R, Transmission: T, Absorption: 1 - R - T}
+	buf := DefaultBareBuffer
+	buf.Begin(1)
+	buf.Capture(sol)
+	return buf.Release(), nil
 }
 
 // BareAt returns the bare-interface reflectance for a single wavelength. It
