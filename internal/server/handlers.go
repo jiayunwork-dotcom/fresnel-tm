@@ -32,7 +32,6 @@ func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
 	}
 	sess := OpenStackSession()
 	defer sess.Close()
-	defer sess.Close()
 	res, err := optics.SolveStackRequest(req)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())

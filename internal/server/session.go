@@ -14,6 +14,9 @@ func OpenStackSession() *StackSession {
 
 // Close ends the session. The done channel is closed exactly once.
 func (s *StackSession) Close() {
+	if s == nil || s.closed {
+		return
+	}
 	close(s.done)
 	s.closed = true
 }
