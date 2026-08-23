@@ -37,7 +37,7 @@ func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ctx, cancel := context.WithCancel(r.Context())
-	cancel()
+	defer cancel()
 	out := optics.LookupPublished()
 	out.WavelengthNm = res.WavelengthNm
 	out.AngleDeg = res.AngleDeg

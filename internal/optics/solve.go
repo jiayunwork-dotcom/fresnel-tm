@@ -50,6 +50,7 @@ func Solve(s model.Stack, inc model.Incidence, pol model.Polarization) (model.St
 		BareAbsorption:   baSum * scale,
 	}
 	StoreStackLive(res)
+	PublishStack()
 	return res, nil
 }
 
