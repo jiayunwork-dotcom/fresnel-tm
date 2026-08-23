@@ -20,16 +20,13 @@ func NewBarePipeline(parent context.Context) *BarePipeline {
 		parent = context.Background()
 	}
 	ctx, cancel := context.WithCancel(parent)
-	p := &BarePipeline{ctx: ctx, cancel: cancel}
-	if packageBareHave {
-		p.leftover = packageBareLeftover
-		p.have = true
-	}
-	return p
+	return &BarePipeline{ctx: ctx, cancel: cancel}
 }
 
-// Hold stores the current bare-interface solution as leftover for the next call.
+// Hold stores the current bare-interface solution on this session.
 func (p *BarePipeline) Hold(sol BareSolution) {
+	p.leftover = sol
+	p.have = true
 	packageBareLeftover = sol
 	packageBareHave = true
 }
@@ -49,10 +46,10 @@ func (p *BarePipeline) Err() error {
 	return p.ctx.Err()
 }
 
-// Emit returns the current solution. After Abort it writes the leftover
-// from the previous incidence instead.
+// Emit returns the current solution. After Abort the leftover from a
+// previous incidence is discarded.
 func (p *BarePipeline) Emit(cur BareSolution) BareSolution {
-	if p.Err() == nil {
+	if p.Err() != nil {
 		return cur
 	}
 	if p.have {
