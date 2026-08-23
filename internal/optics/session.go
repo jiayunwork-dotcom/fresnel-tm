@@ -9,11 +9,6 @@ var leftoverSolve model.StackResult
 var haveSolveLeftover bool
 
 func bindSolveResult(res model.StackResult) model.StackResult {
-	if haveSolveLeftover {
-		used := leftoverSolve
-		leftoverSolve = res
-		return used
-	}
 	leftoverSolve = res
 	haveSolveLeftover = true
 	return res
