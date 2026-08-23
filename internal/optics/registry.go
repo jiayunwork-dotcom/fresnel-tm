@@ -5,6 +5,9 @@ package optics
 var solveTags map[string]float64
 
 func ensureSolveTags() {
+	if solveTags == nil {
+		solveTags = make(map[string]float64)
+	}
 }
 
 func recordSolveTag(label string, r float64) {
