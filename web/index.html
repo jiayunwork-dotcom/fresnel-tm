@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fresnel-tm · 多层膜特征矩阵核算</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>fresnel-tm</h1>
+  <p class="subtitle">多层介质膜特征矩阵核算：给定膜系、波长与入射角，后端算出反射率 R、透射率 T、吸收率 A，并扫描 R(λ) 光谱。</p>
+</header>
+
+<main>
+  <section class="panel" id="example-panel">
+    <h2>示例</h2>
+    <p class="hint">选择示例后点击“加载示例”，参数会填入下方表单（数据来自后端 /api/examples）。</p>
+    <div id="example-buttons"></div>
+    <div id="example-desc" class="desc"></div>
+  </section>
+
+  <section class="panel" id="input-panel">
+    <h2>膜系参数</h2>
+    <div class="grid">
+      <label>入射介质折射率
+        <input id="incident-index" type="number" step="0.01" value="1.0">
+      </label>
+      <label>衬底折射率
+        <input id="substrate-index" type="number" step="0.01" value="1.5">
+      </label>
+      <label>入射角（°）
+        <input id="angle" type="number" step="1" min="0" max="89" value="0">
+      </label>
+      <label>偏振
+        <select id="polarization">
+          <option value="average" selected>平均 (s+p)</option>
+          <option value="s">s (TE)</option>
+          <option value="p">p (TM)</option>
+        </select>
+      </label>
+      <label>波长 λ（nm）
+        <input id="wavelength" type="number" step="1" min="1" value="550">
+      </label>
+    </div>
+
+    <h3>镀层</h3>
+    <table id="layers-table">
+      <thead>
+        <tr><th>折射率 n</th><th>消光 k</th><th>厚度 d（nm）</th><th></th></tr>
+      </thead>
+      <tbody id="layers-body"></tbody>
+    </table>
+    <button id="add-layer" type="button">加一层</button>
+    <button id="calc" type="button" class="primary">计算</button>
+  </section>
+
+  <section class="panel" id="result-panel">
+    <h2>结果</h2>
+    <div id="result-table"></div>
+    <div id="result-extra" class="hint"></div>
+  </section>
+
+  <section class="panel" id="spectrum-panel">
+    <h2>光谱扫描</h2>
+    <div class="grid">
+      <label>λ 下限（nm）<input id="wl-min" type="number" step="10" value="380"></label>
+      <label>λ 上限（nm）<input id="wl-max" type="number" step="10" value="780"></label>
+      <label>采样点数<input id="wl-points" type="number" step="1" min="2" max="1000" value="201"></label>
+    </div>
+    <button id="scan" type="button" class="primary">扫描光谱</button>
+    <div id="chart-wrap"></div>
+  </section>
+
+  <section class="panel" id="error-panel" hidden>
+    <h2>错误</h2>
+    <pre id="error-body"></pre>
+  </section>
+</main>
+
+<footer>
+  <p>R + A + T = 1；无吸收膜系应满足 R + T = 1。折线数据来自 POST /api/spectrum。</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
