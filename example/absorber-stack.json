@@ -1,0 +1,20 @@
+{
+  "name": "absorber-stack",
+  "description": "A thin chromium film on glass. The metal layer absorbs strongly: reflectance, transmittance and absorptance sum to one (R + A + T = 1), and the absorptance is clearly above zero in the visible band.",
+  "incident": {
+    "index": 1.0
+  },
+  "layers": [
+    {
+      "index": 3.17,
+      "extinction": 3.33,
+      "thickness_nm": 20.0
+    }
+  ],
+  "substrate": {
+    "index": 1.5
+  },
+  "wavelength_nm": 550,
+  "angle_deg": 0,
+  "polarization": "average"
+}
